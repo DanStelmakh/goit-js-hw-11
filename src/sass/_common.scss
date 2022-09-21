@@ -1,1 +1,39 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
+
+body {
+  box-sizing: border-box;
+}
+input {
+  padding: 8px 8px;
+}
+.search {
+  background-color: teal;
+  height: 50px;
+}
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  gap: 15px;
+}
+.load-more {
+  display: block;
+  margin: 15px auto auto auto;
+}
+.button {
+  font-weight: bold;
+  border-color: transparent;
+  color: #fff;
+  background: #55acee;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #3c93d5;
+}
+.button:hover {
+  background: #6fc6ff;
+}
