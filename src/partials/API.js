@@ -11,8 +11,6 @@ export default class ImagesApiService {
   }
 
   async fetchArticles() {
-    this.page += 1;
-
     try {
       const { data } = await axios.get(
         `?key=${KEY}&q=${this.form}s&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
@@ -27,11 +25,19 @@ export default class ImagesApiService {
     this.page = 1;
   }
 
+  //   !New
+  get currentPage() {
+    return this.page;
+  }
+
   //   / Чтобы из внешнего кода записать сюда что-то, сделаем геттер и сеттер
   get query() {
     return this.form;
   }
   set query(newQuery) {
     this.form = newQuery;
+  }
+  incrementPage() {
+    this.page += 1;
   }
 }
