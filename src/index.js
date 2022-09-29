@@ -5,7 +5,6 @@ const axios = require('axios');
 import ImagesApiService from './partials/API';
 import LoadMoreBtn from './partials/load-more';
 
-let totalPage = 0;
 let gallerySimpleLightbox = new SimpleLightbox('.photo-link');
 
 // / Refs
@@ -26,7 +25,9 @@ const imagesApiService = new ImagesApiService();
 
 // / EventListeners
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', fetchCards);
+loadMoreBtn.refs.button.addEventListener('click', loadmore);
+
+let totalPage = 0;
 
 // / Submit (search)
 function onSearch(event) {
@@ -49,28 +50,38 @@ function onSearch(event) {
   clearImages();
   fetchCards();
 }
-// / Click (load more)
 
-function fetchCards() {
+async function fetchCards() {
+  // !29.09.2022
   loadMoreBtn.disable();
+
+  //   const images = await imagesApiService.fetchArticles();
+  //   const { totalHits, hits } = images;
+  //   if (!hits.length) {
+  //     loadMoreBtn.hide();
+
+  //     Notiflix.Notify.failure(
+  //       'Sorry, there are no images matching your search query. Please try again.'
+  //     );
+  //   }
+
+  //   createImagesMarkup(hits);
+
+  //   totalPage += hits.lenth;
+
+  //   if (totalPage < totalHits) {
+  //     loadMoreBtn.disable();
+  //   }
+  //   if (totalPage >= totalHits) {
+  //     Notiflix.Notify.info(
+  //       'We re sorry, but you have reached the end of search results.'
+  //     );
+  //   }
 
   imagesApiService
     .fetchArticles()
     .then(images => {
       const { totalHits, hits } = images;
-      console.log(images);
-      if (hits.length === 0) {
-        Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again. Try Again'
-        );
-        return;
-      }
-
-      createImagesMarkup(images.hits);
-      imagesApiService.incrementPage();
-
-      //  console.log(images);
-      // !New
       totalPage = Math.ceil(images.totalHits / 40);
       Notiflix.Notify.success(
         `Hooray! We found ${images.totalHits} images.`,
@@ -78,6 +89,19 @@ function fetchCards() {
         "Let's watch"
       );
       gallerySimpleLightbox.refresh();
+      if (hits.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again'
+        );
+        return;
+      }
+
+      createImagesMarkup(images.hits);
+      // imagesApiService.incrementPage();
+
+      // !New
+
+      // !29.09
       if (imagesApiService.currentPage === totalPage) {
         loadMoreBtn.hide();
         Notiflix.Notify.warning(
@@ -127,4 +151,16 @@ function createImagesMarkup(hits) {
 
 function clearImages() {
   refs.gallery.innerHTML = '';
+}
+
+function loadmore() {
+  if (imagesApiService.currentPage === totalPage) {
+    console.log(imagesApiService.currentPage);
+    loadMoreBtn.hide();
+    Notiflix.Notify.warning(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+  }
+  imagesApiService.incrementPage();
+  fetchCards();
 }

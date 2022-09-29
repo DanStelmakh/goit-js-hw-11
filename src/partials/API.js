@@ -11,15 +11,11 @@ export default class ImagesApiService {
   }
 
   async fetchArticles() {
-    try {
-      const { data } = await axios.get(
-        `?key=${KEY}&q=${this.form}s&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
-      );
-      // console.log(data);
-      return data;
-    } catch (error) {
-      Notiflix.Report(error);
-    }
+    const { data } = await axios.get(
+      `?key=${KEY}&q=${this.form}s&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
+    );
+    // console.log(data);
+    return data;
   }
   resetPage() {
     this.page = 1;
